@@ -1,26 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Exact Color Palette matching brand identity */
+  --color-plum: #3E2432;          /* Deep Plum Button & Headlines */
+  --color-plum-hover: #503042;
+  --color-terracotta: #B96B4D;    /* Terracotta Italics & PsyD Badge */
+  --color-terracotta-soft: #D98868;
+  --color-bg-cream: #FAF7F2;      /* Warm Ivory / Cream Background */
+  --color-sage: #8F9E92;          /* Soft Sage Decorative Lines & Accents */
+  --color-charcoal: #2A2426;      /* Charcoal Body & Headings */
+  --color-muted: #6B6365;         /* Muted Descriptive Text */
+  --color-border: #E8E2D9;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  --color-plum: #3E2432;
+  --color-plum-hover: #503042;
+  --color-terracotta: #B96B4D;
+  --color-cream: #FAF7F2;
+  --color-sage: #8F9E92;
+  --color-charcoal: #2A2426;
+  --color-muted: #6B6365;
+  --color-border: #E8E2D9;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  color: var(--color-charcoal);
+  background-color: var(--color-bg-cream);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: inherit;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+/* =========================================================================
+   PREMIUM THERAPEUTIC KEYFRAME ANIMATIONS
+   Designed with gentle easing (cubic-bezier(0.16, 1, 0.3, 1)) for a calm,
+   editorial feel rather than abrupt or bouncy motion.
+   ========================================================================= */
+
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0.4deg);
+  }
+}
+
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.985) translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes cardPop {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle botanical floating animation */
+.animate-botanical-float {
+  animation: subtleFloat 7s ease-in-out infinite;
+}
+
+/* Hero staggered animation classes */
+.animate-hero-eyebrow {
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-hero-h1 {
+  animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
+  opacity: 0;
+}
+
+.animate-hero-text {
+  animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.24s forwards;
+  opacity: 0;
+}
+
+.animate-hero-cta {
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.36s forwards;
+  opacity: 0;
+}
+
+.animate-hero-availability {
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.48s forwards;
+  opacity: 0;
+}
+
+.animate-hero-tagline {
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.58s forwards;
+  opacity: 0;
+}
+
+.animate-hero-portrait {
+  animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.18s forwards;
+  opacity: 0;
+}
+
+.animate-hero-card {
+  animation: cardPop 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+  opacity: 0;
+}
+
+/* =========================================================================
+   SCROLL REVEAL UTILITIES (INTERSECTION OBSERVER)
+   ========================================================================= */
+
+.reveal-fade-up {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-fade-up.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================================
+   BUTTON MICRO-INTERACTIONS
+   - Smooth 250-300ms transitions
+   - Upward movement on hover (-1.5px)
+   - Active pressed state (translateY(0.5px) scale(0.99))
+   - Subtle shadow expansion
+   ========================================================================= */
+
+.btn-plum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3E2432;
+  color: #FAF7F2;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.8125rem 2rem;
+  border-radius: 9999px;
+  border: 1px solid #3E2432;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s ease,
+              background-color 0.25s ease,
+              border-color 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 8px -2px rgba(62, 36, 50, 0.15);
+}
+
+.btn-plum:hover {
+  background-color: #503042;
+  border-color: #503042;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(62, 36, 50, 0.28);
+}
+
+.btn-plum:active {
+  transform: translateY(0.5px) scale(0.99);
+  box-shadow: 0 2px 6px -1px rgba(62, 36, 50, 0.2);
+}
+
+.btn-pill-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: #3E2432;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.8125rem 2rem;
+  border-radius: 9999px;
+  border: 1px solid #735D67;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s ease,
+              background-color 0.25s ease,
+              color 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-pill-outline:hover {
+  background-color: #3E2432;
+  color: #FAF7F2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px -3px rgba(62, 36, 50, 0.15);
+}
+
+.btn-pill-outline:active {
+  transform: translateY(0.5px) scale(0.99);
+}
+
+/* =========================================================================
+   CARDS & IMAGE MICRO-INTERACTIONS
+   ========================================================================= */
+
+.organic-card {
+  border-radius: 1.25rem;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+}
+
+.organic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px -10px rgba(62, 36, 50, 0.09);
+  border-color: rgba(62, 36, 50, 0.25);
+}
+
+/* Gentle image scale container */
+.img-hover-scale {
+  overflow: hidden;
+}
+
+.img-hover-scale img {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.img-hover-scale:hover img {
+  transform: scale(1.02);
+}
+
+/* Navigation link hover animation */
+.nav-link-hover {
+  position: relative;
+  display: inline-block;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background-color: #3E2432;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link-hover:hover::after {
+  width: 100%;
+}
+
+/* =========================================================================
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION
+   Respects OS-level accessibility preferences by neutralizing animations.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .reveal-fade-up {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
