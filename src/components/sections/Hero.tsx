@@ -384,68 +384,46 @@ export default function Hero() {
                   IMAGE FRAME
               ====================================================== */}
 
-              <div
-                className="
-                  relative
-                  aspect-[0.86]
-                  overflow-hidden
-                  rounded-[3rem]
-                  border-[6px]
-                  border-[#E7DCD2]
-                  bg-[#E9E2DA]
-                  shadow-[0_30px_80px_rgba(67,35,56,0.16)]
-                  animate-hero-portrait
-                  group
-                  sm:rounded-[3.5rem]
-                "
-              >
+           <div
+  className="
+    relative
+    aspect-[0.86]
+    w-full
+    overflow-hidden
 
-                <Image
-                  src="/images/maya/maya-portrait.png"
-                  alt="Dr. Maya Reynolds, PsyD, licensed clinical psychologist in Santa Monica"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="
-                    object-cover
-                    object-center
-                    transition-transform
-                    duration-1000
-                    ease-out
-                    group-hover:scale-[1.015]
-                  "
-                />
+    rounded-tl-[3.5rem]
+    rounded-tr-none
+    rounded-br-[3.5rem]
+    rounded-bl-none
 
-                {/* Image overlay */}
-                <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none
-                    absolute
-                    inset-0
-                    bg-gradient-to-t
-                    from-[#432338]/10
-                    via-transparent
-                    to-white/10
-                  "
-                />
+    border-[6px]
+    border-[#E7DCD2]
+    bg-[#E9E2DA]
 
-                {/* Inner frame */}
-                <div
-                  aria-hidden="true"
-                  className="
-                    pointer-events-none
-                    absolute
-                    inset-0
-                    rounded-[2.65rem]
-                    ring-1
-                    ring-inset
-                    ring-white/50
-                    sm:rounded-[3.1rem]
-                  "
-                />
+    shadow-[0_30px_80px_rgba(67,35,56,0.16)]
 
-              </div>
+    group
+  "
+>
+  <img
+    src="/images/maya/maya-portrait.png"
+    alt="Dr. Maya Reynolds, PsyD, licensed clinical psychologist in Santa Monica"
+    className="
+      absolute
+      inset-0
+      h-full
+      w-full
+      object-cover
+      object-center
+
+      transition-transform
+      duration-1000
+      ease-out
+
+      group-hover:scale-[1.02]
+    "
+  />
+</div>
 
               {/* ======================================================
                   FLOATING PROFILE CARD
