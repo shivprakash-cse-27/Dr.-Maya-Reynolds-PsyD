@@ -59,7 +59,7 @@ export default function HomePage() {
         {/* Section 9: About Dr. Maya - Comprehensive professional biography & credentials */}
         <AboutMaya />
 
-        {/* Section 10: Office & Telehealth - In-person Santa Monica office and California virtual care */}
+        {/* Section 10: Our Office - A Calm Space for Healing (Custom Creative Thinking Section) */}
         <Office />
 
         {/* Section 11: FAQ - Accordion answering profile-grounded questions */}

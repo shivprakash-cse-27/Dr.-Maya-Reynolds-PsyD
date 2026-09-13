@@ -67,9 +67,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [mobileMenuOpen]);
 
-  // Navigation menu: About | How I Work | Approach | FAQ | Contact (links to /contact page)
+  // Navigation menu: About | Our Office | How I Work | Approach | FAQ | Contact (links to /contact page)
   const navLinks = [
     { name: "About", href: "/#about" },
+    { name: "Our Office", href: "/#office" },
     { name: "How I Work", href: "/#who-i-work-with" },
     { name: "Approach", href: "/#approach" },
     { name: "FAQ", href: "/#faq" },
