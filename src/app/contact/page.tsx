@@ -16,10 +16,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navbar, Footer } from "@/components";
 import Reveal from "@/components/ui/Reveal";
-import { MapPin, Monitor, CheckCircle2, Send, Clock, ShieldCheck, ArrowLeft } from "lucide-react";
+import { MapPin, Monitor, CheckCircle2, Send, Clock, ShieldCheck, ArrowLeft, Phone } from "lucide-react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [result, setResult] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,10 +32,40 @@ export default function ContactPage() {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Simulate consultation inquiry receipt
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setResult("Sending...");
+
+    const form = e.currentTarget;
+    const formPayload = new FormData(form);
+
+    // Read access key from environment variable with user's fallback
+    const accessKey =
+      process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
+      "d82703ad-8fcd-40f4-80be-eb176df5276d";
+    formPayload.append("access_key", accessKey);
+    formPayload.append("subject", `New Therapy Consultation Inquiry from ${formData.name}`);
+    formPayload.append("from_name", "Dr. Maya Reynolds Therapy Practice");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formPayload,
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        setSubmitted(true);
+      } else {
+        setResult(data.message || "Error submitting form. Please try again.");
+      }
+    } catch {
+      setResult("Network error. Please check your connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -107,13 +140,24 @@ export default function ContactPage() {
                           Inquiry Received
                         </h2>
                         <p className="text-base text-[#6B6365] max-w-md mx-auto leading-relaxed">
-                          Thank you for reaching out, {formData.name || "friend"}. Dr. Maya Reynolds will review your details with complete confidentiality and be in touch soon regarding consultation availability.
+                          Thank you for reaching out, {formData.name || "friend"}. Dr. Maya Reynolds will review your details with complete confidentiality and be in touch soon at {formData.email}{formData.phone ? ` or via phone at ${formData.phone}` : ""} regarding consultation availability.
                         </p>
                         <div className="pt-4">
                           <button
                             type="button"
-                            onClick={() => setSubmitted(false)}
-                            className="btn-pill-outline text-xs font-semibold px-6 py-3"
+                            onClick={() => {
+                              setSubmitted(false);
+                              setResult("");
+                              setFormData({
+                                name: "",
+                                email: "",
+                                phone: "",
+                                preference: "in-person",
+                                focus: "anxiety",
+                                message: "",
+                              });
+                            }}
+                            className="btn-pill-outline text-xs font-semibold px-6 py-3 cursor-pointer"
                           >
                             Send Another Message
                           </button>
@@ -165,8 +209,28 @@ export default function ContactPage() {
                           </div>
                         </div>
 
-                        {/* Session Preference & Primary Focus Area */}
+                        {/* Phone Number & Session Location */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-wider text-[#3E2432]">
+                                Phone Number <span className="text-[11px] font-normal lowercase tracking-normal text-[#6B6365]">(optional)</span>
+                              </label>
+                              <span className="text-[11px] text-[#6B6365]">Call or SMS</span>
+                            </div>
+                            <div className="relative">
+                              <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                placeholder="e.g., (310) 555-0192"
+                                className="w-full px-4 py-3 rounded-xl border border-[#E8E2D9] bg-[#FAF7F2]/50 text-sm text-[#2A2426] placeholder-[#6B6365]/50 focus:outline-none focus:ring-2 focus:ring-[#3E2432]/20 focus:border-[#3E2432] transition-colors"
+                              />
+                            </div>
+                          </div>
+
                           <div className="space-y-2">
                             <label htmlFor="preference" className="block text-xs font-semibold uppercase tracking-wider text-[#3E2432]">
                               Session Location
@@ -182,24 +246,25 @@ export default function ContactPage() {
                               <option value="telehealth">Secure Telehealth (California)</option>
                             </select>
                           </div>
+                        </div>
 
-                          <div className="space-y-2">
-                            <label htmlFor="focus" className="block text-xs font-semibold uppercase tracking-wider text-[#3E2432]">
-                              Primary Clinical Focus
-                            </label>
-                            <select
-                              id="focus"
-                              name="focus"
-                              value={formData.focus}
-                              onChange={handleChange}
-                              className="w-full px-4 py-3 rounded-xl border border-[#E8E2D9] bg-[#FAF7F2]/50 text-sm text-[#2A2426] focus:outline-none focus:ring-2 focus:ring-[#3E2432]/20 focus:border-[#3E2432] transition-colors"
-                            >
-                              <option value="anxiety">Anxiety &amp; Panic Therapy</option>
-                              <option value="trauma">Trauma &amp; EMDR Processing</option>
-                              <option value="burnout">Burnout &amp; Perfectionism</option>
-                              <option value="other">General Stress / Life Transitions</option>
-                            </select>
-                          </div>
+                        {/* Primary Clinical Focus */}
+                        <div className="space-y-2">
+                          <label htmlFor="focus" className="block text-xs font-semibold uppercase tracking-wider text-[#3E2432]">
+                            Primary Clinical Focus
+                          </label>
+                          <select
+                            id="focus"
+                            name="focus"
+                            value={formData.focus}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 rounded-xl border border-[#E8E2D9] bg-[#FAF7F2]/50 text-sm text-[#2A2426] focus:outline-none focus:ring-2 focus:ring-[#3E2432]/20 focus:border-[#3E2432] transition-colors"
+                          >
+                            <option value="anxiety">Anxiety &amp; Panic Therapy</option>
+                            <option value="trauma">Trauma &amp; EMDR Processing</option>
+                            <option value="burnout">Burnout &amp; Perfectionism</option>
+                            <option value="other">General Stress / Life Transitions</option>
+                          </select>
                         </div>
 
                         {/* Message textarea */}
@@ -227,14 +292,22 @@ export default function ContactPage() {
                           </span>
                         </div>
 
+                        {/* Result feedback message on error */}
+                        {result && !submitted && (
+                          <div className="p-4 rounded-xl bg-[#B96B4D]/10 border border-[#B96B4D]/30 text-xs text-[#B96B4D] font-medium animate-in fade-in duration-200">
+                            {result}
+                          </div>
+                        )}
+
                         {/* Submit button */}
                         <div className="pt-2">
                           <button
                             type="submit"
-                            className="btn-plum w-full sm:w-auto px-10 py-4 text-xs tracking-[0.12em] font-semibold flex items-center justify-center gap-2 group cursor-pointer"
+                            disabled={isSubmitting}
+                            className="btn-plum w-full sm:w-auto px-10 py-4 text-xs tracking-[0.12em] font-semibold flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                           >
-                            <span>Send Consultation Inquiry</span>
-                            <Send className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                            <span>{isSubmitting ? "Sending..." : "Send Consultation Inquiry"}</span>
+                            <Send className={`w-3.5 h-3.5 transition-transform duration-300 ${isSubmitting ? "animate-pulse" : "group-hover:translate-x-1"}`} />
                           </button>
                         </div>
                       </form>

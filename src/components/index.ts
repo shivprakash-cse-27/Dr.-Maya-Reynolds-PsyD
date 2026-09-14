@@ -15,3 +15,7 @@ export { default as AboutMaya } from "./sections/AboutMaya";
 export { default as Office } from "./sections/Office";
 export { default as FAQ } from "./sections/FAQ";
 export { default as AppointmentCTA } from "./sections/AppointmentCTA";
+
+// UI Components
+export { default as ContactForm } from "./ui/ContactForm";
+export { default as Reveal } from "./ui/Reveal";
